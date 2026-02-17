@@ -1,65 +1,63 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import { HeroSection } from "@/components/home/HeroSection";
+import { StatsCounter } from "@/components/home/StatsCounter";
+import { AboutBrief } from "@/components/home/AboutBrief";
+import { ProductGrid } from "@/components/home/ProductGrid";
+import { SubBrandsFeature } from "@/components/home/SubBrandsFeature";
+import { WhyPremier } from "@/components/home/WhyPremier";
+import { ClientLogos } from "@/components/home/ClientLogos";
+import { ProjectSpotlight } from "@/components/home/ProjectSpotlight";
+import { TestimonialCarousel } from "@/components/home/TestimonialCarousel";
+import { Timeline } from "@/components/home/Timeline";
+import { CTABanner } from "@/components/home/CTABanner";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Premier Bars Limited — Engineering India's Infrastructure Since 2004",
+  description:
+    "India's leading steel and infrastructure manufacturer. TMT Bars (GreenPro Certified), Pre-Engineered Buildings, Telecom Towers, PAVCON Concrete Pavers, POLMAX Decorative Poles. 20+ years. 500+ clients. Jaipur, Rajasthan.",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Premier Bars Limited",
+  url: "https://premierbarsltd.com",
+  description:
+    "India's leading steel and infrastructure manufacturer since 2004, headquartered in Jaipur, Rajasthan.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "402, Nidhi Kamal Tower, Ajmer Road",
+    addressLocality: "Jaipur",
+    addressRegion: "Rajasthan",
+    postalCode: "302006",
+    addressCountry: "IN",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "customercare@premierbarsltd.com",
+    contactType: "customer service",
+  },
+  foundingDate: "2004",
+};
+
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <HeroSection />
+      <StatsCounter />
+      <AboutBrief />
+      <ProductGrid />
+      <SubBrandsFeature />
+      <WhyPremier />
+      <ClientLogos />
+      <ProjectSpotlight />
+      <TestimonialCarousel />
+      <Timeline />
+      <CTABanner />
+    </>
   );
 }

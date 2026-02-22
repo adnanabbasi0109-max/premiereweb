@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ARFallback } from "@/components/ar/ARFallback";
+import { ARCameraView } from "@/components/ar/ARCameraView";
 import Link from "next/link";
 
 const PAVER_PATTERNS = [
@@ -21,14 +21,8 @@ const PAVER_COLORS = [
 export default function PavconARPage() {
   const [pattern, setPattern] = useState(PAVER_PATTERNS[0]);
   const [color, setColor] = useState(PAVER_COLORS[0]);
-  const [isMobile, setIsMobile] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const mobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-      (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
-    setIsMobile(mobile);
-  }, []);
 
   // Draw paver pattern on canvas
   useEffect(() => {
@@ -58,6 +52,18 @@ export default function PavconARPage() {
     }
   }, [pattern, color]);
 
+  /* ── Full-screen camera AR view ── */
+  if (showCamera) {
+    return (
+      <ARCameraView
+        onClose={() => setShowCamera(false)}
+        productType="paver"
+        paverPattern={pattern.id}
+        paverColor={color.id}
+      />
+    );
+  }
+
   return (
     <main className="bg-[#0D1B2A] min-h-screen">
       {/* Header */}
@@ -84,32 +90,21 @@ export default function PavconARPage() {
           <p className="text-white/50">Experience our pavers on your actual site</p>
         </div>
 
-        {/* AR: View 3D model through camera */}
+        {/* AR: Open camera button */}
         <div className="text-center py-8">
           <div className="flex flex-col items-center gap-4">
-            {isMobile ? (
-              <>
-                <a
-                  rel="ar"
-                  href={pattern.model}
-                  className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto hover:bg-[#E8D48B] transition-colors"
-                >
-                  <span className="text-2xl">📱</span>
-                  View in Your Space
-                  <img src={pattern.model} hidden alt="" />
-                </a>
-                <p className="text-white/40 text-sm">
-                  Opens your camera to place pavers in your real environment
-                </p>
-              </>
-            ) : (
-              <ARFallback
-                productType="paver"
-                paverPattern={pattern.id}
-                paverColor={color.hex}
-                modelUrl={pattern.model}
-              />
-            )}
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setShowCamera(true)}
+              className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto hover:bg-[#E8D48B] transition-colors"
+            >
+              <span className="text-2xl">📱</span>
+              View in AR
+            </motion.button>
+            <p className="text-white/40 text-sm">
+              Opens your camera to place pavers in your real environment
+            </p>
           </div>
         </div>
 

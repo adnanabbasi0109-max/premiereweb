@@ -5,34 +5,28 @@ import { ARFallback } from "@/components/ar/ARFallback";
 import { ARCameraView } from "@/components/ar/ARCameraView";
 
 const POLE_TYPES = [
-  { id: "decorative", label: "Decorative Urban", height: 8, color: "#888888" },
-  { id: "street", label: "Street Light", height: 10, color: "#999999" },
-  { id: "octagonal", label: "Octagonal", height: 12, color: "#777777" },
-  { id: "high-mast", label: "High-Mast", height: 30, color: "#AAAAAA" },
+  { id: "decorative", label: "Decorative Urban", height: 8, color: "#888888", model: "/models/street-lamp-1.usdz" },
+  { id: "street", label: "Street Light", height: 10, color: "#999999", model: "/models/street-lamp-2.usdz" },
+  { id: "octagonal", label: "Octagonal", height: 12, color: "#777777", model: "/models/street-lamp-1.usdz" },
+  { id: "high-mast", label: "High-Mast", height: 30, color: "#AAAAAA", model: "/models/street-lamp-2.usdz" },
 ];
 
 export default function PolmaxARPage() {
-  const [arSupported, setArSupported] = useState<boolean | null>(null);
   const [poleType, setPoleType] = useState(POLE_TYPES[0]);
   const [lightOn, setLightOn] = useState(false);
   const [height, setHeight] = useState(10);
   const [showCamera, setShowCamera] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const check = async () => {
-      if (typeof navigator !== "undefined" && "xr" in navigator) {
-        try {
-          const supported = await (navigator as unknown as { xr: { isSessionSupported: (m: string) => Promise<boolean> } }).xr.isSessionSupported("immersive-ar");
-          setArSupported(supported);
-        } catch {
-          setArSupported(false);
-        }
-      } else {
-        setArSupported(false);
-      }
-    };
-    check();
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    setIsIOS(ios);
+    const mobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
+    setIsMobile(mobile);
   }, []);
 
   useEffect(() => {
@@ -105,33 +99,49 @@ export default function PolmaxARPage() {
           <p className="text-white/50">Visualise our poles in your street, garden, or site</p>
         </div>
 
-        {arSupported === null && (
-          <div className="text-center py-16 text-white/50">Checking AR support...</div>
-        )}
+        {/* AR Quick Look for iOS / Camera fallback for others */}
+        <div className="text-center py-8">
+          <div className="flex flex-col items-center gap-4">
+            {/* iOS AR Quick Look - native 3D AR with USDZ */}
+            {isIOS && (
+              <a
+                rel="ar"
+                href={poleType.model}
+                className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto hover:bg-[#E8D48B] transition-colors"
+              >
+                <span className="text-2xl">📱</span>
+                View in AR
+                <img src={poleType.model} hidden alt="" />
+              </a>
+            )}
 
-        {arSupported === false && (
-          <ARFallback
-            productType="pole"
-            poleColor={poleType.color}
-            poleHeight={height}
-            lightOn={lightOn}
-          />
-        )}
+            {/* Camera-based AR for all mobile */}
+            {isMobile && (
+              <button
+                onClick={() => setShowCamera(true)}
+                className={`font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto transition-colors ${
+                  isIOS
+                    ? "border border-white/30 text-white hover:border-[#C9A84C] hover:text-[#C9A84C]"
+                    : "bg-[#C9A84C] text-[#1A1A2E] hover:bg-[#E8D48B]"
+                }`}
+              >
+                <span className="text-2xl">📷</span>
+                {isIOS ? "Use Camera Instead" : "Launch AR Camera"}
+              </button>
+            )}
 
-        {arSupported === true && (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">▲</div>
-            <h3 className="text-white text-xl font-bold mb-4">AR Mode Ready</h3>
-            <p className="text-white/60 mb-6">Tap your screen to place a pole in your environment</p>
-            <button
-              onClick={() => setShowCamera(true)}
-              className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto"
-            >
-              <span className="text-2xl">📷</span>
-              Launch AR Camera
-            </button>
+            {/* Desktop fallback */}
+            {!isMobile && (
+              <ARFallback
+                productType="pole"
+                poleColor={poleType.color}
+                poleHeight={height}
+                lightOn={lightOn}
+                modelUrl={poleType.model}
+              />
+            )}
           </div>
-        )}
+        </div>
 
         {showCamera && (
           <ARCameraView

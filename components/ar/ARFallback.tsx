@@ -9,6 +9,7 @@ interface ARFallbackProps {
   poleColor?: string;
   poleHeight?: number;
   lightOn?: boolean;
+  modelUrl?: string;
 }
 
 export function ARFallback({
@@ -18,11 +19,13 @@ export function ARFallback({
   poleColor,
   poleHeight,
   lightOn,
+  modelUrl,
 }: ARFallbackProps) {
   const [image, setImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [hasCamera, setHasCamera] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   const [pageUrl, setPageUrl] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -35,6 +38,9 @@ export function ARFallback({
       ) ||
       (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
     setIsMobile(mobile);
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    setIsIOS(ios);
     setPageUrl(window.location.href);
 
     const checkCamera = async () => {
@@ -92,13 +98,30 @@ export function ARFallback({
 
           {!image ? (
             <div className="flex flex-col items-center gap-4">
+              {/* iOS AR Quick Look with USDZ */}
+              {isIOS && modelUrl && (
+                <a
+                  rel="ar"
+                  href={modelUrl}
+                  className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl hover:bg-[#E8D48B] transition-colors text-lg flex items-center gap-3"
+                >
+                  <span className="text-2xl">📱</span>
+                  View in AR
+                  <img src={modelUrl} hidden alt="" />
+                </a>
+              )}
+
               {hasCamera && (
                 <button
                   onClick={() => setShowCamera(true)}
-                  className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl hover:bg-[#E8D48B] transition-colors text-lg flex items-center gap-3"
+                  className={`font-bold px-8 py-4 rounded-xl transition-colors text-lg flex items-center gap-3 ${
+                    isIOS && modelUrl
+                      ? "border border-white/30 text-white hover:border-[#C9A84C] hover:text-[#C9A84C]"
+                      : "bg-[#C9A84C] text-[#1A1A2E] hover:bg-[#E8D48B]"
+                  }`}
                 >
                   <span className="text-2xl">📷</span>
-                  Launch AR Camera
+                  {isIOS && modelUrl ? "Use Camera Instead" : "Launch AR Camera"}
                 </button>
               )}
 

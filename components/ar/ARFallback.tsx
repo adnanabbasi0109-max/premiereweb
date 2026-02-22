@@ -1,6 +1,5 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { ARCameraView } from "./ARCameraView";
 
 interface ARFallbackProps {
   productType: "paver" | "pole";
@@ -14,23 +13,13 @@ interface ARFallbackProps {
 
 export function ARFallback({
   productType,
-  paverPattern,
-  paverColor,
-  poleColor,
-  poleHeight,
-  lightOn,
   modelUrl,
 }: ARFallbackProps) {
   const [image, setImage] = useState<string | null>(null);
-  const [showCamera, setShowCamera] = useState(false);
-  const [hasCamera, setHasCamera] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
   const [pageUrl, setPageUrl] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Detect mobile/tablet and camera availability
   useEffect(() => {
     const mobile =
       /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -38,23 +27,7 @@ export function ARFallback({
       ) ||
       (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
     setIsMobile(mobile);
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    setIsIOS(ios);
     setPageUrl(window.location.href);
-
-    const checkCamera = async () => {
-      try {
-        if (typeof navigator.mediaDevices?.getUserMedia === "function") {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const videoInputs = devices.filter((d) => d.kind === "videoinput");
-          setHasCamera(videoInputs.length > 0);
-        }
-      } catch {
-        setHasCamera(false);
-      }
-    };
-    checkCamera();
   }, []);
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,26 +40,12 @@ export function ARFallback({
     reader.readAsDataURL(file);
   };
 
-  if (showCamera) {
-    return (
-      <ARCameraView
-        onClose={() => setShowCamera(false)}
-        productType={productType}
-        paverPattern={paverPattern}
-        paverColor={paverColor}
-        poleColor={poleColor}
-        poleHeight={poleHeight}
-        lightOn={lightOn}
-      />
-    );
-  }
-
   const productLabel =
     productType === "paver" ? "PAVCON pavers" : "POLMAX poles";
 
   return (
     <div className="text-center space-y-6 py-12">
-      {/* ── Mobile / Tablet: camera-first experience ── */}
+      {/* ── Mobile / Tablet: USDZ AR experience ── */}
       {isMobile ? (
         <>
           <div className="text-6xl mb-4">📸</div>
@@ -98,31 +57,17 @@ export function ARFallback({
 
           {!image ? (
             <div className="flex flex-col items-center gap-4">
-              {/* iOS AR Quick Look with USDZ */}
-              {isIOS && modelUrl && (
+              {/* AR Quick Look with USDZ - opens camera with 3D model */}
+              {modelUrl && (
                 <a
                   rel="ar"
                   href={modelUrl}
                   className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl hover:bg-[#E8D48B] transition-colors text-lg flex items-center gap-3"
                 >
                   <span className="text-2xl">📱</span>
-                  View in AR
+                  View in Your Space
                   <img src={modelUrl} hidden alt="" />
                 </a>
-              )}
-
-              {hasCamera && (
-                <button
-                  onClick={() => setShowCamera(true)}
-                  className={`font-bold px-8 py-4 rounded-xl transition-colors text-lg flex items-center gap-3 ${
-                    isIOS && modelUrl
-                      ? "border border-white/30 text-white hover:border-[#C9A84C] hover:text-[#C9A84C]"
-                      : "bg-[#C9A84C] text-[#1A1A2E] hover:bg-[#E8D48B]"
-                  }`}
-                >
-                  <span className="text-2xl">📷</span>
-                  {isIOS && modelUrl ? "Use Camera Instead" : "Launch AR Camera"}
-                </button>
               )}
 
               <input
@@ -134,11 +79,7 @@ export function ARFallback({
               />
               <button
                 onClick={() => inputRef.current?.click()}
-                className={`font-bold px-8 py-4 rounded-xl transition-colors text-lg ${
-                  hasCamera
-                    ? "border border-white/30 text-white hover:border-[#C9A84C] hover:text-[#C9A84C]"
-                    : "bg-[#C9A84C] text-[#1A1A2E] hover:bg-[#E8D48B]"
-                }`}
+                className="border border-white/30 text-white font-bold px-8 py-4 rounded-xl hover:border-[#C9A84C] hover:text-[#C9A84C] transition-colors text-lg"
               >
                 Upload Photo
               </button>
@@ -147,12 +88,7 @@ export function ARFallback({
             <UploadedImageView
               image={image}
               productType={productType}
-              hasCamera={hasCamera}
               onClear={() => setImage(null)}
-              onCamera={() => {
-                setImage(null);
-                setShowCamera(true);
-              }}
             />
           )}
         </>
@@ -207,15 +143,12 @@ export function ARFallback({
               <UploadedImageView
                 image={image}
                 productType={productType}
-                hasCamera={false}
                 onClear={() => setImage(null)}
-                onCamera={() => {}}
               />
             )}
           </div>
         </>
       )}
-      <canvas ref={canvasRef} className="hidden" />
     </div>
   );
 }
@@ -225,15 +158,11 @@ export function ARFallback({
 function UploadedImageView({
   image,
   productType,
-  hasCamera,
   onClear,
-  onCamera,
 }: {
   image: string;
   productType: "paver" | "pole";
-  hasCamera: boolean;
   onClear: () => void;
-  onCamera: () => void;
 }) {
   return (
     <div className="relative inline-block max-w-lg w-full">
@@ -253,14 +182,6 @@ function UploadedImageView({
         </div>
       </div>
       <div className="mt-4 flex flex-wrap gap-3 justify-center">
-        {hasCamera && (
-          <button
-            onClick={onCamera}
-            className="border border-white/30 text-white px-5 py-2 rounded-xl hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all text-sm flex items-center gap-2"
-          >
-            <span>📷</span> Use Camera Instead
-          </button>
-        )}
         <button
           onClick={onClear}
           className="border border-white/30 text-white px-5 py-2 rounded-xl hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all text-sm"

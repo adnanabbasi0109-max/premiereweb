@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ARFallback } from "@/components/ar/ARFallback";
-import { ARCameraView } from "@/components/ar/ARCameraView";
 
 const POLE_TYPES = [
   { id: "decorative", label: "Decorative Urban", height: 8, color: "#888888", model: "/models/street-lamp-1.usdz" },
@@ -15,15 +14,10 @@ export default function PolmaxARPage() {
   const [poleType, setPoleType] = useState(POLE_TYPES[0]);
   const [lightOn, setLightOn] = useState(false);
   const [height, setHeight] = useState(10);
-  const [showCamera, setShowCamera] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    setIsIOS(ios);
     const mobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
     setIsMobile(mobile);
@@ -99,39 +93,25 @@ export default function PolmaxARPage() {
           <p className="text-white/50">Visualise our poles in your street, garden, or site</p>
         </div>
 
-        {/* AR Quick Look for iOS / Camera fallback for others */}
+        {/* AR: View 3D model through camera */}
         <div className="text-center py-8">
           <div className="flex flex-col items-center gap-4">
-            {/* iOS AR Quick Look - native 3D AR with USDZ */}
-            {isIOS && (
-              <a
-                rel="ar"
-                href={poleType.model}
-                className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto hover:bg-[#E8D48B] transition-colors"
-              >
-                <span className="text-2xl">📱</span>
-                View in AR
-                <img src={poleType.model} hidden alt="" />
-              </a>
-            )}
-
-            {/* Camera-based AR for all mobile */}
-            {isMobile && (
-              <button
-                onClick={() => setShowCamera(true)}
-                className={`font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto transition-colors ${
-                  isIOS
-                    ? "border border-white/30 text-white hover:border-[#C9A84C] hover:text-[#C9A84C]"
-                    : "bg-[#C9A84C] text-[#1A1A2E] hover:bg-[#E8D48B]"
-                }`}
-              >
-                <span className="text-2xl">📷</span>
-                {isIOS ? "Use Camera Instead" : "Launch AR Camera"}
-              </button>
-            )}
-
-            {/* Desktop fallback */}
-            {!isMobile && (
+            {isMobile ? (
+              <>
+                <a
+                  rel="ar"
+                  href={poleType.model}
+                  className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto hover:bg-[#E8D48B] transition-colors"
+                >
+                  <span className="text-2xl">📱</span>
+                  View in Your Space
+                  <img src={poleType.model} hidden alt="" />
+                </a>
+                <p className="text-white/40 text-sm">
+                  Opens your camera to place a 3D pole in your real environment
+                </p>
+              </>
+            ) : (
               <ARFallback
                 productType="pole"
                 poleColor={poleType.color}
@@ -142,16 +122,6 @@ export default function PolmaxARPage() {
             )}
           </div>
         </div>
-
-        {showCamera && (
-          <ARCameraView
-            onClose={() => setShowCamera(false)}
-            productType="pole"
-            poleColor={poleType.color}
-            poleHeight={height}
-            lightOn={lightOn}
-          />
-        )}
 
         {/* Preview Panel */}
         <div className="mt-12 bg-white/5 border border-white/10 rounded-2xl p-6">

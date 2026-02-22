@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ARFallback } from "@/components/ar/ARFallback";
-import { ARCameraView } from "@/components/ar/ARCameraView";
 import Link from "next/link";
 
 const PAVER_PATTERNS = [
@@ -22,15 +21,10 @@ const PAVER_COLORS = [
 export default function PavconARPage() {
   const [pattern, setPattern] = useState(PAVER_PATTERNS[0]);
   const [color, setColor] = useState(PAVER_COLORS[0]);
-  const [showCamera, setShowCamera] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    setIsIOS(ios);
     const mobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
     setIsMobile(mobile);
@@ -90,39 +84,25 @@ export default function PavconARPage() {
           <p className="text-white/50">Experience our pavers on your actual site</p>
         </div>
 
-        {/* AR Quick Look for iOS / Camera fallback for others */}
+        {/* AR: View 3D model through camera */}
         <div className="text-center py-8">
           <div className="flex flex-col items-center gap-4">
-            {/* iOS AR Quick Look - native 3D AR with USDZ */}
-            {isIOS && (
-              <a
-                rel="ar"
-                href={pattern.model}
-                className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto hover:bg-[#E8D48B] transition-colors"
-              >
-                <span className="text-2xl">📱</span>
-                View in AR
-                <img src={pattern.model} hidden alt="" />
-              </a>
-            )}
-
-            {/* Camera-based AR for all mobile */}
-            {isMobile && (
-              <button
-                onClick={() => setShowCamera(true)}
-                className={`font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto transition-colors ${
-                  isIOS
-                    ? "border border-white/30 text-white hover:border-[#C9A84C] hover:text-[#C9A84C]"
-                    : "bg-[#C9A84C] text-[#1A1A2E] hover:bg-[#E8D48B]"
-                }`}
-              >
-                <span className="text-2xl">📷</span>
-                {isIOS ? "Use Camera Instead" : "Launch AR Camera"}
-              </button>
-            )}
-
-            {/* Desktop fallback */}
-            {!isMobile && (
+            {isMobile ? (
+              <>
+                <a
+                  rel="ar"
+                  href={pattern.model}
+                  className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto hover:bg-[#E8D48B] transition-colors"
+                >
+                  <span className="text-2xl">📱</span>
+                  View in Your Space
+                  <img src={pattern.model} hidden alt="" />
+                </a>
+                <p className="text-white/40 text-sm">
+                  Opens your camera to place pavers in your real environment
+                </p>
+              </>
+            ) : (
               <ARFallback
                 productType="paver"
                 paverPattern={pattern.id}
@@ -132,15 +112,6 @@ export default function PavconARPage() {
             )}
           </div>
         </div>
-
-        {showCamera && (
-          <ARCameraView
-            onClose={() => setShowCamera(false)}
-            productType="paver"
-            paverPattern={pattern.id}
-            paverColor={color.hex}
-          />
-        )}
 
         {/* Preview Panel */}
         <div className="mt-12 bg-white/5 border border-white/10 rounded-2xl p-6">

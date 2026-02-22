@@ -163,7 +163,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" onClick={closeAll} className="flex items-center shrink-0">
             <Image
-              src="/logo.png"
+              src="/logo-v2.png"
               alt="Premier Bars Limited"
               width={140}
               height={48}

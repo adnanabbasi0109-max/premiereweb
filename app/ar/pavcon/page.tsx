@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ARFallback } from "@/components/ar/ARFallback";
+import { ARCameraView } from "@/components/ar/ARCameraView";
 import Link from "next/link";
 
 const PAVER_PATTERNS = [
@@ -22,6 +23,7 @@ export default function PavconARPage() {
   const [arSupported, setArSupported] = useState<boolean | null>(null);
   const [pattern, setPattern] = useState(PAVER_PATTERNS[0]);
   const [color, setColor] = useState(PAVER_COLORS[0]);
+  const [showCamera, setShowCamera] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -99,7 +101,11 @@ export default function PavconARPage() {
         )}
 
         {arSupported === false && (
-          <ARFallback productType="paver" />
+          <ARFallback
+            productType="paver"
+            paverPattern={pattern.id}
+            paverColor={color.hex}
+          />
         )}
 
         {arSupported === true && (
@@ -107,10 +113,23 @@ export default function PavconARPage() {
             <div className="text-6xl mb-4">◈</div>
             <h3 className="text-white text-xl font-bold mb-4">AR Mode Ready</h3>
             <p className="text-white/60 mb-6">Point your camera at a flat surface to place pavers</p>
-            <button className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg">
+            <button
+              onClick={() => setShowCamera(true)}
+              className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto"
+            >
+              <span className="text-2xl">📷</span>
               Launch AR Camera
             </button>
           </div>
+        )}
+
+        {showCamera && (
+          <ARCameraView
+            onClose={() => setShowCamera(false)}
+            productType="paver"
+            paverPattern={pattern.id}
+            paverColor={color.hex}
+          />
         )}
 
         {/* Preview Panel */}

@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ARFallback } from "@/components/ar/ARFallback";
+import { ARCameraView } from "@/components/ar/ARCameraView";
 
 const POLE_TYPES = [
   { id: "decorative", label: "Decorative Urban", height: 8, color: "#888888" },
@@ -15,6 +16,7 @@ export default function PolmaxARPage() {
   const [poleType, setPoleType] = useState(POLE_TYPES[0]);
   const [lightOn, setLightOn] = useState(false);
   const [height, setHeight] = useState(10);
+  const [showCamera, setShowCamera] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -107,17 +109,38 @@ export default function PolmaxARPage() {
           <div className="text-center py-16 text-white/50">Checking AR support...</div>
         )}
 
-        {arSupported === false && <ARFallback productType="pole" />}
+        {arSupported === false && (
+          <ARFallback
+            productType="pole"
+            poleColor={poleType.color}
+            poleHeight={height}
+            lightOn={lightOn}
+          />
+        )}
 
         {arSupported === true && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">▲</div>
             <h3 className="text-white text-xl font-bold mb-4">AR Mode Ready</h3>
             <p className="text-white/60 mb-6">Tap your screen to place a pole in your environment</p>
-            <button className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg">
+            <button
+              onClick={() => setShowCamera(true)}
+              className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-8 py-4 rounded-xl text-lg flex items-center gap-3 mx-auto"
+            >
+              <span className="text-2xl">📷</span>
               Launch AR Camera
             </button>
           </div>
+        )}
+
+        {showCamera && (
+          <ARCameraView
+            onClose={() => setShowCamera(false)}
+            productType="pole"
+            poleColor={poleType.color}
+            poleHeight={height}
+            lightOn={lightOn}
+          />
         )}
 
         {/* Preview Panel */}

@@ -13,10 +13,10 @@ const PAVER_PATTERNS = [
 ];
 
 const PAVER_COLORS = [
-  { id: "natural", label: "Natural", hex: "#C4A882" },
-  { id: "charcoal", label: "Charcoal", hex: "#555555" },
-  { id: "terracotta", label: "Terracotta", hex: "#C4704A" },
-  { id: "slate", label: "Slate", hex: "#708090" },
+  { id: "natural", label: "Natural", hex: "#8B7355" },
+  { id: "charcoal", label: "Charcoal", hex: "#333333" },
+  { id: "terracotta", label: "Terracotta", hex: "#8B4A2A" },
+  { id: "slate", label: "Slate", hex: "#4A5568" },
 ];
 
 export default function PavconARPage() {

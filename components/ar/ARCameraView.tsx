@@ -226,13 +226,20 @@ function drawPaverOverlay(
   color: string,
 ) {
   const startY = h * 0.55;
-  const rows = 10;
+  const rows = 14;
   const tileW = w / 7;
   const tileH = tileW / 2;
+  const gap = 2;
 
   ctx.save();
-  ctx.globalAlpha = 0.55;
-  ctx.fillStyle = color;
+
+  // Dark ground shadow underneath the pavers
+  ctx.globalAlpha = 0.6;
+  ctx.fillStyle = "#1a1a1a";
+  ctx.fillRect(0, startY, w, h - startY);
+
+  // Draw paver tiles with high opacity
+  ctx.globalAlpha = 0.9;
 
   for (let row = 0; row < rows; row++) {
     const offset =
@@ -245,10 +252,19 @@ function drawPaverOverlay(
     for (let col = -1; col < Math.ceil(w / tileW) + 1; col++) {
       const x = col * tileW + offset;
       const y = startY + row * tileH;
-      ctx.fillRect(x, y, tileW - 3, tileH - 3);
+
+      // Main tile color (dark)
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, tileW - gap, tileH - gap);
+
+      // Darker edge for depth
+      ctx.fillStyle = "rgba(0,0,0,0.3)";
+      ctx.fillRect(x, y + tileH - gap - 2, tileW - gap, 2);
+      ctx.fillRect(x + tileW - gap - 2, y, 2, tileH - gap);
     }
   }
 
+  // Border outline
   ctx.globalAlpha = 1;
   ctx.strokeStyle = "#C9A84C";
   ctx.lineWidth = 2;
@@ -267,43 +283,104 @@ function drawPoleOverlay(
   light: boolean,
 ) {
   const cx = w / 2;
-  const bottom = h * 0.82;
-  const poleH = h * 0.5 * Math.min(height / 45, 1);
-  const poleW = Math.max(w * 0.015, 8);
+  const bottom = h * 0.85;
+  const poleH = h * 0.55 * Math.min(height / 45, 1);
+  const poleW = Math.max(w * 0.02, 10);
 
   ctx.save();
-  ctx.globalAlpha = 0.7;
+  ctx.globalAlpha = 0.92;
 
-  // Pole shaft
-  ctx.fillStyle = color;
+  // Ground shadow
+  ctx.fillStyle = "rgba(0,0,0,0.35)";
+  ctx.beginPath();
+  ctx.ellipse(cx, bottom + 4, poleW * 6, poleW * 1.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Pole shaft with gradient for 3D effect
+  const shaftGrad = ctx.createLinearGradient(cx - poleW / 2, 0, cx + poleW / 2, 0);
+  shaftGrad.addColorStop(0, color);
+  shaftGrad.addColorStop(0.3, lightenColor(color, 30));
+  shaftGrad.addColorStop(0.7, color);
+  shaftGrad.addColorStop(1, darkenColor(color, 40));
+  ctx.fillStyle = shaftGrad;
   ctx.fillRect(cx - poleW / 2, bottom - poleH, poleW, poleH);
 
-  // Base plate
-  ctx.fillStyle = "#666";
-  const baseW = poleW * 4;
-  ctx.fillRect(cx - baseW / 2, bottom, baseW, baseW / 5);
+  // Base plate with 3D look
+  const baseW = poleW * 5;
+  const baseH = poleW * 1.5;
+  ctx.fillStyle = darkenColor(color, 30);
+  ctx.beginPath();
+  ctx.moveTo(cx - baseW / 2, bottom);
+  ctx.lineTo(cx - baseW / 2 + 4, bottom + baseH);
+  ctx.lineTo(cx + baseW / 2 - 4, bottom + baseH);
+  ctx.lineTo(cx + baseW / 2, bottom);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = lightenColor(color, 10);
+  ctx.fillRect(cx - baseW / 2, bottom - 2, baseW, 4);
 
-  // Lamp head
+  // Lamp arm extending to the side
+  const armLen = poleW * 6;
+  const armY = bottom - poleH;
+  ctx.fillStyle = darkenColor(color, 20);
+  // Curved arm
+  ctx.beginPath();
+  ctx.moveTo(cx, armY);
+  ctx.quadraticCurveTo(cx + armLen * 0.3, armY - poleW * 2, cx + armLen, armY - poleW);
+  ctx.lineTo(cx + armLen, armY - poleW + 4);
+  ctx.quadraticCurveTo(cx + armLen * 0.3, armY - poleW * 2 + 4, cx, armY + 4);
+  ctx.closePath();
+  ctx.fill();
+
+  // Lamp housing (at end of arm)
+  const lampX = cx + armLen;
+  const lampY = armY - poleW;
+  const lampW = poleW * 4;
+  const lampH = poleW * 2;
+
+  // Lamp body
+  ctx.fillStyle = "#333";
+  ctx.beginPath();
+  ctx.roundRect(lampX - lampW / 2, lampY - lampH / 2, lampW, lampH, 4);
+  ctx.fill();
+
+  // Lamp lens (bottom)
+  ctx.fillStyle = light ? "#FFE08A" : "#666";
+  ctx.fillRect(lampX - lampW / 2 + 3, lampY + lampH / 2 - 4, lampW - 6, 4);
+
+  // Top cap
   ctx.fillStyle = "#C9A84C";
-  const lampW = poleW * 5;
-  ctx.fillRect(cx - lampW / 2, bottom - poleH - poleW, lampW, poleW * 1.2);
+  ctx.fillRect(lampX - lampW / 2 - 2, lampY - lampH / 2 - 3, lampW + 4, 5);
 
-  // Light glow
+  // Light cone
   if (light) {
-    ctx.globalAlpha = 0.25;
+    ctx.globalAlpha = 0.35;
     const grad = ctx.createRadialGradient(
-      cx, bottom - poleH, poleW,
-      cx, bottom - poleH + poleH * 0.6, poleH * 0.6,
+      lampX, lampY + lampH / 2, 2,
+      lampX, lampY + lampH / 2 + poleH * 0.7, poleH * 0.5,
     );
     grad.addColorStop(0, "#FFE08A");
+    grad.addColorStop(0.5, "rgba(255,224,138,0.15)");
     grad.addColorStop(1, "rgba(255,224,138,0)");
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.moveTo(cx, bottom - poleH);
-    ctx.lineTo(cx - poleH * 0.5, bottom);
-    ctx.lineTo(cx + poleH * 0.5, bottom);
+    ctx.moveTo(lampX - lampW / 2, lampY + lampH / 2);
+    ctx.lineTo(lampX - poleH * 0.4, bottom);
+    ctx.lineTo(lampX + poleH * 0.4, bottom);
+    ctx.lineTo(lampX + lampW / 2, lampY + lampH / 2);
     ctx.closePath();
     ctx.fill();
+
+    // Glow around lamp
+    ctx.globalAlpha = 0.2;
+    const glowGrad = ctx.createRadialGradient(
+      lampX, lampY, lampW / 2,
+      lampX, lampY, lampW * 2,
+    );
+    glowGrad.addColorStop(0, "#FFE08A");
+    glowGrad.addColorStop(1, "rgba(255,224,138,0)");
+    ctx.fillStyle = glowGrad;
+    ctx.fillRect(lampX - lampW * 2, lampY - lampW * 2, lampW * 4, lampW * 4);
   }
 
   ctx.globalAlpha = 1;
@@ -313,8 +390,26 @@ function drawPoleOverlay(
   ctx.lineWidth = 2;
   ctx.setLineDash([6, 3]);
   ctx.beginPath();
-  ctx.ellipse(cx, bottom + baseW / 4, baseW, baseW / 3, 0, 0, Math.PI * 2);
+  ctx.ellipse(cx, bottom + baseH / 2 + 4, baseW * 1.2, baseW / 3, 0, 0, Math.PI * 2);
   ctx.stroke();
   ctx.setLineDash([]);
   ctx.restore();
+}
+
+/* ── Color helpers ── */
+
+function lightenColor(hex: string, amount: number): string {
+  const num = parseInt(hex.replace("#", ""), 16);
+  const r = Math.min(255, (num >> 16) + amount);
+  const g = Math.min(255, ((num >> 8) & 0xff) + amount);
+  const b = Math.min(255, (num & 0xff) + amount);
+  return `rgb(${r},${g},${b})`;
+}
+
+function darkenColor(hex: string, amount: number): string {
+  const num = parseInt(hex.replace("#", ""), 16);
+  const r = Math.max(0, (num >> 16) - amount);
+  const g = Math.max(0, ((num >> 8) & 0xff) - amount);
+  const b = Math.max(0, (num & 0xff) - amount);
+  return `rgb(${r},${g},${b})`;
 }

@@ -34,7 +34,7 @@ const jsonLd = {
   },
   contactPoint: {
     "@type": "ContactPoint",
-    email: "customercare@premierbarsltd.com",
+    email: "info@premierbarsltd.com",
     contactType: "customer service",
   },
   foundingDate: "2004",

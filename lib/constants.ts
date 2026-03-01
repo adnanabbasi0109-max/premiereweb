@@ -4,7 +4,7 @@ export const COMPANY = {
   description:
     "A steel and infrastructure powerhouse delivering exceptional quality across TMT Bars, Pre-Engineered Buildings, Towers, Concrete Products, Poles, and Scaffolding.",
   founded: 2004,
-  email: "customercare@premierbarsltd.com",
+  email: "info@premierbarsltd.com",
   phone: "+91-141-2000000",
   website: "https://premierbarsltd.com",
   addresses: {

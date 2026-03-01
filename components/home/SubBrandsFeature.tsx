@@ -11,8 +11,6 @@ const BRANDS = [
     description:
       "Premier's flagship concrete products brand. From vibro-compacted pavers to EPS sustainable blocks — PAVCON defines the standard for modern concrete construction in India.",
     href: "/brands/pavcon",
-    arHref: "/ar/pavcon",
-    arLabel: "See PAVCON Pavers in AR",
     gradient: "from-[#2C2C2C] to-[#1A1A2E]",
     icon: "⬡",
     features: ["Vibro-Compact Technology", "M40–M50 Grade", "AMIL-Certified", "Custom Colours"],
@@ -25,8 +23,6 @@ const BRANDS = [
     description:
       "Premier's engineering brand for poles, towers, and structural steel. CNC-precision, hot-dip galvanized, and built to last 20+ years in India's toughest urban environments.",
     href: "/brands/polmax",
-    arHref: "/ar/polmax",
-    arLabel: "Visualize POLMAX Poles in AR",
     gradient: "from-[#0D1B2A] to-[#16325B]",
     icon: "▲",
     features: ["CNC Plasma Cutting", "SAW Welding", "Hot-Dip Galvanized", "Smart City Ready"],
@@ -68,9 +64,6 @@ export function SubBrandsFeature() {
                 <div className="flex items-center gap-4 flex-wrap">
                   <Link href={brand.href} className="inline-flex items-center gap-2 bg-[#C9A84C] text-[#1A1A2E] font-bold px-6 py-3 rounded-xl hover:bg-[#E8D48B] transition-colors text-sm">
                     Discover {brand.name} →
-                  </Link>
-                  <Link href={brand.arHref} className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-5 py-3 rounded-xl hover:border-[#C9A84C] hover:text-[#C9A84C] transition-colors text-sm">
-                    <span>◈</span> {brand.arLabel}
                   </Link>
                 </div>
               </div>

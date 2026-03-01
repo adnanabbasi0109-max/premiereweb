@@ -31,7 +31,6 @@ export default function PavconPage() {
             <p className="text-white/60 text-lg max-w-2xl leading-relaxed mb-8">PAVCON is Premier Bars Limited&apos;s flagship concrete products brand — delivering precision-manufactured blocks, pavers, kerb stones, and EPS units using Vibro-Compact technology.</p>
             <div className="flex gap-4 flex-wrap">
               <Link href="/products/concrete-blocks-pavers" className="bg-[#C9A84C] text-[#1A1A2E] font-bold px-7 py-3 rounded-xl hover:bg-[#E8D48B] transition-colors">View Products →</Link>
-              <Link href="/ar/pavcon" className="border border-white/30 text-white font-medium px-6 py-3 rounded-xl hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all">◈ View in AR</Link>
             </div>
           </div>
         </div>

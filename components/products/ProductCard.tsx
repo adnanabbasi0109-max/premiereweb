@@ -18,7 +18,6 @@ export function ProductCard({ product }: { product: Product }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A] via-[#0D1B2A]/40 to-transparent" />
         {product.brand && <div className="absolute top-4 right-4"><Badge variant="gold">{product.brand}</Badge></div>}
-        {product.arEnabled && <div className="absolute top-4 left-4"><Badge variant="success">AR Ready</Badge></div>}
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <p className="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">{product.category}</p>
           <h3 className="text-white text-xl font-bold mb-1">{product.name}</h3>

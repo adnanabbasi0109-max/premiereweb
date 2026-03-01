@@ -14,17 +14,9 @@ export function ProductHero({ product }: { product: Product }) {
             <div className="flex items-center gap-3 mb-3">
               <Badge variant="gold">{product.category}</Badge>
               {product.brand && <Badge variant="steel">{product.brand}</Badge>}
-              {product.arEnabled && <Badge variant="success">AR Ready</Badge>}
             </div>
             <h1 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-3">{product.name}</h1>
             <p className="text-[#C9A84C] text-xl font-medium italic">{product.tagline}</p>
-          </div>
-          <div className="flex gap-3 flex-wrap">
-            {product.arEnabled && (
-              <a href={product.id === "concrete-blocks-pavers" ? "/ar/pavcon" : "/ar/polmax"} className="inline-flex items-center gap-2 bg-[#C9A84C] text-[#1A1A2E] font-bold px-6 py-3 rounded-xl hover:bg-[#E8D48B] transition-colors">
-                ◈ View in AR
-              </a>
-            )}
           </div>
         </div>
       </div>

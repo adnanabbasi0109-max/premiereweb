@@ -21,7 +21,6 @@ export interface Product {
   highlights: string[];
   certifications: string[];
   brochureUrl?: string;
-  arEnabled?: boolean;
 }
 
 export const PRODUCTS: Product[] = [
@@ -70,7 +69,6 @@ export const PRODUCTS: Product[] = [
       "Manufactured from ISI-certified billets",
     ],
     certifications: ["ISI:1786:2008", "DIN 488:1986", "GreenPro Ecolabel", "ISO 9001"],
-    arEnabled: false,
   },
   {
     id: "pre-engineered-buildings",
@@ -110,7 +108,6 @@ export const PRODUCTS: Product[] = [
       "Factory-fabricated components ensure zero site wastage",
     ],
     certifications: ["ISO 9001", "IS:2062"],
-    arEnabled: false,
   },
   {
     id: "transmission-towers",
@@ -148,7 +145,6 @@ export const PRODUCTS: Product[] = [
       "BIM-enabled structural design and simulation",
     ],
     certifications: ["IS:802", "ISO 9001"],
-    arEnabled: false,
   },
   {
     id: "concrete-blocks-pavers",
@@ -189,7 +185,6 @@ export const PRODUCTS: Product[] = [
       "Custom colours and patterns for architectural applications",
     ],
     certifications: ["IS:15658:2006", "AMIL Certified", "ISO 9001", "ISO 14001"],
-    arEnabled: true,
   },
   {
     id: "tubular-decorative-poles",
@@ -228,7 +223,6 @@ export const PRODUCTS: Product[] = [
       "Complete turnkey: supply, installation, commissioning",
     ],
     certifications: ["IS:2062", "IS:5613", "ISO 9001"],
-    arEnabled: true,
   },
   {
     id: "scaffolding-formworks",
@@ -263,7 +257,6 @@ export const PRODUCTS: Product[] = [
       "Compatible with all major scaffolding systems",
     ],
     certifications: ["IS:1161", "ISO 9001"],
-    arEnabled: false,
   },
 ];
 

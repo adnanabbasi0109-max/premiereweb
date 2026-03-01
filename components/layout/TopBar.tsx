@@ -30,22 +30,6 @@ export function TopBar() {
             <span>⬇</span>
             <span>Download Brochure</span>
           </Link>
-          <div className="flex items-center gap-3 text-white/50">
-            {[
-              { href: COMPANY.social.linkedin, icon: "in", label: "LinkedIn" },
-              { href: COMPANY.social.twitter, icon: "𝕏", label: "Twitter" },
-              { href: COMPANY.social.youtube, icon: "▶", label: "YouTube" },
-            ].map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                aria-label={s.label}
-                className="hover:text-[#C9A84C] transition-colors"
-              >
-                {s.icon}
-              </a>
-            ))}
-          </div>
         </div>
       </div>
     </div>

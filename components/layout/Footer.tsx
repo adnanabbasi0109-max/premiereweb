@@ -72,25 +72,6 @@ export function Footer() {
             <p className="text-white/50 text-sm leading-relaxed mb-6">
               Engineering India's infrastructure through world-class steel, concrete, and structural solutions since 2004.
             </p>
-            <div className="flex gap-3">
-              {[
-                { href: COMPANY.social.linkedin, label: "LinkedIn", icon: "in" },
-                { href: COMPANY.social.twitter, label: "Twitter", icon: "𝕏" },
-                { href: COMPANY.social.youtube, label: "YouTube", icon: "▶" },
-                { href: COMPANY.social.instagram, label: "Instagram", icon: "◎" },
-              ].map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center
-                             justify-center text-white/50 hover:text-[#C9A84C] hover:border-[#C9A84C]/40
-                             transition-all text-xs font-bold"
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Col 2: Products */}

@@ -32,15 +32,6 @@ export function HeroSection() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-6"
-        >
-          <Badge variant="gold">GreenPro Certified — First in India</Badge>
-        </motion.div>
-
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

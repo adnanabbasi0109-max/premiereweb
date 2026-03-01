@@ -4,7 +4,6 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ToastProvider } from "@/components/ui/Toast";
-import { FloatingExtras } from "@/components/shared/FloatingExtras";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -93,7 +92,6 @@ export default function RootLayout({
           <Navbar />
           <main id="main-content">{children}</main>
           <Footer />
-          <FloatingExtras />
         </ToastProvider>
       </body>
     </html>

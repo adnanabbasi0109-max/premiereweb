@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { COMPANY, NAV_LINKS } from "@/lib/constants";
 
 const PRODUCT_LINKS = [
@@ -59,14 +60,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Col 1: Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-[#C9A84C] rounded-lg flex items-center justify-center font-bold text-[#1A1A2E] text-sm">
-                PB
-              </div>
-              <div>
-                <div className="text-white font-bold">Premier Bars Limited</div>
-                <div className="text-[#C9A84C] text-[10px] uppercase tracking-widest">Since 2004</div>
-              </div>
+            <div className="mb-5">
+              <Image
+                src="/logo.png"
+                alt="Premier Bars Limited"
+                width={140}
+                height={48}
+                className="h-10 w-auto"
+              />
             </div>
             <p className="text-white/50 text-sm leading-relaxed mb-6">
               Engineering India's infrastructure through world-class steel, concrete, and structural solutions since 2004.

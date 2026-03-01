@@ -55,17 +55,6 @@ const NAV: NavItem[] = [
       { label: "Governance", href: "/investor-relations/governance" },
     ],
   },
-  {
-    label: "More",
-    href: "/blog",
-    children: [
-      { label: "Blog & Insights", href: "/blog" },
-      { label: "Careers", href: "/careers" },
-      { label: "Partner With Us", href: "/partner-with-us" },
-      { label: "Downloads", href: "/downloads" },
-      { label: "Monthly Prices", href: "/monthly-prices" },
-    ],
-  },
 ];
 
 function Dropdown({ item, align, onClose }: { item: NavItem; align: "left" | "right"; onClose: () => void }) {

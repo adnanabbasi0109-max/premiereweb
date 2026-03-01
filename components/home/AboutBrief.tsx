@@ -25,33 +25,7 @@ export function AboutBrief() {
   return (
     <section className="py-24 bg-[#F5F3F0]">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-          <motion.div
-            variants={SLIDE_IN_LEFT}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <div
-              className="rounded-2xl overflow-hidden h-[480px] relative"
-              style={{ background: "linear-gradient(135deg, #1A1A2E 0%, #16325B 60%, #0D1B2A 100%)" }}
-            >
-              <div className="absolute inset-0 steel-mesh-bg" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <div className="text-8xl mb-4 opacity-20">⚙</div>
-                  <p className="text-[#C9A84C] font-mono text-sm uppercase tracking-widest">Manufacturing Excellence</p>
-                  <p className="text-white/40 text-sm mt-2">Unit 1 & Unit 2, Jaipur</p>
-                </div>
-              </div>
-              <div className="absolute bottom-6 left-6 bg-[#C9A84C] text-[#1A1A2E] px-4 py-2 rounded-xl font-bold text-sm">
-                Est. 2004 · Jaipur, Rajasthan
-              </div>
-            </div>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#C9A84C] rounded-2xl opacity-20 -z-10" />
-          </motion.div>
-
+        <div className="mb-20">
           <motion.div
             variants={SLIDE_IN_RIGHT}
             initial="hidden"

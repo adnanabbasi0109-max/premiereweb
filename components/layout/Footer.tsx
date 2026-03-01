@@ -64,9 +64,9 @@ export function Footer() {
               <Image
                 src="/logo.png"
                 alt="Premier Bars Limited"
-                width={160}
-                height={52}
-                className="h-11 w-auto brightness-0 invert"
+                width={420}
+                height={140}
+                className="h-28 w-auto brightness-0 invert"
               />
             </div>
             <p className="text-white/50 text-sm leading-relaxed mb-6">

@@ -165,9 +165,9 @@ export function Navbar() {
             <Image
               src="/logo.png"
               alt="Premier Bars Limited"
-              width={180}
-              height={56}
-              className="h-12 w-auto brightness-0 invert"
+              width={480}
+              height={150}
+              className="h-32 w-auto brightness-0 invert"
               priority
             />
           </Link>
